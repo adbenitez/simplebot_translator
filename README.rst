@@ -1,7 +1,7 @@
 Translator
 ==========
 
-.. image:: https://img.shields.io/github/v/release/simplebot-org/simplebot_translator
+.. image:: https://img.shields.io/pypi/v/simplebot_translator.svg
    :target: https://pypi.org/project/simplebot_translator
 
 .. image:: https://img.shields.io/pypi/pyversions/simplebot_translator.svg
@@ -10,8 +10,8 @@ Translator
 .. image:: https://pepy.tech/badge/simplebot_translator
    :target: https://pepy.tech/project/simplebot_translator
 
-.. image:: https://img.shields.io/github/license/simplebot-org/simplebot_translator
-   :target: https://github.com/simplebot-org/simplebot_translator/blob/master/LICENSE
+.. image:: https://img.shields.io/pypi/l/simplebot_translator.svg
+   :target: https://pypi.org/project/simplebot_translator
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black

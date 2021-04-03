@@ -1,5 +1,6 @@
 import simplebot
 import translators as ts
+from deltachat import Message
 from simplebot.bot import Replies
 
 __version__ = "1.0.0"
@@ -113,14 +114,19 @@ langs = {
 
 
 @simplebot.command
-def tr(payload: str, replies: Replies) -> None:
+def tr(payload: str, message: Message, replies: Replies) -> None:
     """Translate text.
 
     You need to pass origin and destination language.
     Example: `/tr en es hello world`
     """
     if payload:
-        l1, l2, text = payload.split(maxsplit=2)
+        args = payload.split(maxsplit=2)
+        l1, l2 = args.pop(0), args.pop(0)
+        if args:
+            text = args.pop()
+        elif message.quote:
+            text = message.quote.text
         replies.add(text=ts.google(text, from_language=l1, to_language=l2))
     else:
         replies.add(text="\n".join("* {}: {}".format(k, v) for k, v in langs.items()))
@@ -128,7 +134,8 @@ def tr(payload: str, replies: Replies) -> None:
 
 class TestPlugin:
     def test_tr(self, mocker):
-        msg = mocker.get_one_reply("/tr_en_es hello world")
+        quote = mocker.make_incoming_message("hello world")
+        msg = mocker.get_one_reply("/tr_en_es", quote=quote)
         assert "hola mundo" in msg.text.lower()
 
         msg = mocker.get_one_reply("/tr_es_en hola mundo")

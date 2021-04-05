@@ -1,2 +1,2 @@
-simplebot==1.0.1
+simplebot==1.1.0
 translators==4.7.16

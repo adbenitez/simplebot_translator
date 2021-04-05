@@ -125,9 +125,11 @@ def tr(payload: str, message: Message, replies: Replies) -> None:
         l1, l2 = args.pop(0), args.pop(0)
         if args:
             text = args.pop()
+            quote = message
         elif message.quote:
             text = message.quote.text
-        replies.add(text=ts.google(text, from_language=l1, to_language=l2))
+            quote = message.quote
+        replies.add(text=ts.google(text, from_language=l1, to_language=l2), quote=quote)
     else:
         replies.add(text="\n".join("* {}: {}".format(k, v) for k, v in langs.items()))
 

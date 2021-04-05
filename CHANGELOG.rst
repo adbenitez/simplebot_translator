@@ -5,6 +5,7 @@ Changelog
 -------------
 
 - allow to translate quoted message (#1)
+- quote translated message
 
 1.0.0
 -----

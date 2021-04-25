@@ -1,7 +1,7 @@
 import simplebot
 import translators as ts
 from deltachat import Message
-from simplebot.bot import Replies
+from simplebot.bot import DeltaBot, Replies
 
 __version__ = "1.0.0"
 langs = {
@@ -111,10 +111,28 @@ langs = {
     "Zulu": "zu",
     "Auto-detect": "auto",
 }
+engines = [
+    "google",
+    "yandex",
+    "bing",
+    "sogou",
+    "baidu",
+    "tencent",
+    "youdao",
+    "alibaba",
+    "deepl",
+]
+
+
+@simplebot.hookimpl
+def deltabot_init(bot: DeltaBot) -> None:
+    assert get_engine(bot) in engines, "Invalid engine, set one of: {!r}".format(
+        engines
+    )
 
 
 @simplebot.command
-def tr(payload: str, message: Message, replies: Replies) -> None:
+def tr(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
     """Translate text.
 
     You need to pass origin and destination language.
@@ -129,9 +147,20 @@ def tr(payload: str, message: Message, replies: Replies) -> None:
         elif message.quote:
             text = message.quote.text
             quote = message.quote
-        replies.add(text=ts.google(text, from_language=l1, to_language=l2), quote=quote)
+        engine = getattr(ts, get_engine(bot))
+        replies.add(text=engine(text, from_language=l1, to_language=l2), quote=quote)
     else:
         replies.add(text="\n".join("* {}: {}".format(k, v) for k, v in langs.items()))
+
+
+def get_engine(bot: DeltaBot) -> str:
+    key = "engine"
+    value = engines[0]
+    val = bot.get(key, scope=__name__)
+    if val is None and value is not None:
+        bot.set(key, value, scope=__name__)
+        val = value
+    return val
 
 
 class TestPlugin:

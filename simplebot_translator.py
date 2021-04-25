@@ -3,7 +3,7 @@ import translators as ts
 from deltachat import Message
 from simplebot.bot import DeltaBot, Replies
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 langs = {
     "Afrikaans": "af",
     "Albanian": "sq",

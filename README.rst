@@ -31,5 +31,20 @@ To install run::
 
   pip install simplebot-translator
 
+To configure the engine use::
+
+  simplebot db -s simplebot_translator/engine deepl
+
+Available engines:
+
+- google
+- yandex
+- bing
+- sogou
+- baidu
+- tencent
+- youdao
+- alibaba
+- deepl
 
 .. _SimpleBot: https://github.com/simplebot-org/simplebot

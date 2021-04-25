@@ -11,24 +11,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8]
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+    - uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
-    - run: |
-        python -m pip install --upgrade pip black
+        python-version: '3.6'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install flake8 black
+        python -m pip install '.[test]'
     - name: Check code with black
       run: |
         black --check .
-    - name: Install dependencies
-      run: |
-        python -m pip install flake8
-        python -m pip install '.[test]'
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names

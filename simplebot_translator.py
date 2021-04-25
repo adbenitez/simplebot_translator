@@ -3,7 +3,7 @@ import translators as ts
 from deltachat import Message
 from simplebot.bot import DeltaBot, Replies
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 langs = {
     "Afrikaans": "af",
     "Albanian": "sq",
@@ -126,6 +126,11 @@ engines = [
 
 @simplebot.hookimpl
 def deltabot_init(bot: DeltaBot) -> None:
+    get_engine(bot)  # initialize default engine
+
+
+@simplebot.hookimpl
+def deltabot_start(bot: DeltaBot) -> None:
     assert get_engine(bot) in engines, "Invalid engine, set one of: {!r}".format(
         engines
     )

@@ -1,2 +1,2 @@
 simplebot==1.1.1
-translators==4.7.20
+translators==4.8.1

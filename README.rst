@@ -35,6 +35,8 @@ To configure the engine use::
 
   simplebot db -s simplebot_translator/engine deepl
 
+You may need to install other dependencies to make some engines work, check: https://github.com/UlionTse/translators
+
 Available engines:
 
 - google

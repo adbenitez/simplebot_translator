@@ -1,9 +1,14 @@
 import simplebot
 import translators as ts
 from deltachat import Message
+from pkg_resources import DistributionNotFound, get_distribution
 from simplebot.bot import DeltaBot, Replies
 
-__version__ = "1.2.0"
+try:
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    # package is not installed
+    __version__ = "0.0.0.dev0-unknown"
 langs = {
     "Afrikaans": "af",
     "Albanian": "sq",

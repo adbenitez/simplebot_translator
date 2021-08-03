@@ -1,6 +1,12 @@
 Changelog
 =========
 
+`Unreleased`_
+-------------
+
+- improved commad description.
+- try other engines if the default engine fails.
+
 `1.2.0`_
 --------
 
@@ -17,6 +23,7 @@ Changelog
 -----
 
 - initial release
+
 
 .. _Unreleased: https://github.com/simplebot-org/simplebot/compare/v1.2.0...HEAD
 .. _1.2.0: https://github.com/simplebot-org/simplebot/compare/v1.1.0...1.2.0

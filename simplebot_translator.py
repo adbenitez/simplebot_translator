@@ -145,10 +145,16 @@ def deltabot_start(bot: DeltaBot) -> None:
 
 @simplebot.command
 def tr(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
-    """Translate text.
+    """Translate text. You must pass origin and destination language.
 
-    You need to pass origin and destination language.
-    Example: `/tr en es hello world`
+    Examples:
+    To translate from English to Spanish:
+    /tr en es hello world
+    To detect language automatically and translate it to Spanish:
+    /tr auto es hello world
+    To see the list of language codes:
+    /tr
+    You can also quote-reply a message with the command to translate it.
     """
     if payload:
         args = payload.split(maxsplit=2)
@@ -159,8 +165,19 @@ def tr(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
         elif message.quote:
             text = message.quote.text
             quote = message.quote
-        engine = getattr(ts, get_engine(bot))
-        replies.add(text=engine(text, from_language=l1, to_language=l2), quote=quote)
+        default_engine = get_engine(bot)
+        if engines[0] != default_engine:
+            engines.remove(default_engine)
+            engines.insert(0, default_engine)
+        for name in engines:
+            try:
+                result = getattr(ts, name)(text, from_language=l1, to_language=l2)
+                break
+            except Exception as ex:  # noqa
+                bot.logger.exception(ex)
+        else:
+            result = "❌ Error! Failed to translate :("
+        replies.add(text=result, quote=quote)
     else:
         replies.add(text="\n".join("* {}: {}".format(k, v) for k, v in langs.items()))
 

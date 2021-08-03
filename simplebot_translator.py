@@ -1,3 +1,5 @@
+"""Plugin's hooks and commands definition."""
+
 import simplebot
 import translators as ts
 from deltachat import Message
@@ -174,6 +176,8 @@ def get_engine(bot: DeltaBot) -> str:
 
 
 class TestPlugin:
+    """Offline tests"""
+
     def test_tr(self, mocker):
         quote = mocker.make_incoming_message("hello world")
         msg = mocker.get_one_reply("/tr_en_es", quote=quote)

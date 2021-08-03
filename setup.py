@@ -1,8 +1,24 @@
 """Setup module installation."""
 
+import os
 import re
 
 from setuptools import setup
+
+
+def load_requirements(path: str) -> list:
+    """Load requirements from the given relative path."""
+    with open(path, encoding="utf-8") as file:
+        requirements = []
+        for line in file.read().split("\n"):
+            if line.startswith("-r"):
+                dirname = os.path.dirname(path)
+                filename = line.split(maxsplit=1)[1]
+                requirements.extend(load_requirements(os.path.join(dirname, filename)))
+            elif line and not line.startswith("#"):
+                requirements.append(line.replace("==", ">="))
+        return requirements
+
 
 if __name__ == "__main__":
     MODULE_NAME = "simplebot_translator"
@@ -15,19 +31,6 @@ if __name__ == "__main__":
         long_description = fh.read()
     with open("CHANGELOG.rst") as fh:
         long_description += "\n" + fh.read()
-
-    with open("requirements.txt", encoding="utf-8") as req:
-        install_requires = [
-            line.replace("==", ">=")
-            for line in req.read().split("\n")
-            if line and not line.startswith(("#", "-"))
-        ]
-    with open("requirements-test.txt", encoding="utf-8") as req:
-        test_deps = [
-            line.replace("==", ">=")
-            for line in req.read().split("\n")
-            if line and not line.startswith(("#", "-"))
-        ]
 
     setup(
         name=MODULE_NAME,
@@ -51,8 +54,11 @@ if __name__ == "__main__":
         zip_safe=False,
         include_package_data=True,
         py_modules=[MODULE_NAME],
-        install_requires=install_requires,
-        extras_require={"test": test_deps},
+        install_requires=load_requirements("requirements/requirements.txt"),
+        extras_require={
+            "test": load_requirements("requirements/requirements-test.txt"),
+            "dev": load_requirements("requirements/requirements-dev.txt"),
+        },
         entry_points={
             "simplebot.plugins": "{0} = {0}".format(MODULE_NAME),
         },

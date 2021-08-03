@@ -25,8 +25,6 @@ if __name__ == "__main__":
 
     with open("README.rst") as fh:
         long_description = fh.read()
-    with open("CHANGELOG.rst") as fh:
-        long_description += "\n" + fh.read()
 
     setup(
         name=MODULE_NAME,
@@ -42,7 +40,7 @@ if __name__ == "__main__":
         long_description_content_type="text/x-rst",
         author="The SimpleBot Contributors",
         author_email="adbenitez@nauta.cu",
-        url="https://github.com/simplebot-org/simplebot_translator",
+        url=f"https://github.com/simplebot-org/{MODULE_NAME}",
         keywords="simplebot plugin deltachat",
         license="MPL",
         classifiers=[

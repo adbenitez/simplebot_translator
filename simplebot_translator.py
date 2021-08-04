@@ -158,13 +158,19 @@ def tr(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
     """
     if payload:
         args = payload.split(maxsplit=2)
-        l1, l2 = args.pop(0), args.pop(0)
-        if args:
-            text = args.pop()
+        if len(args) == 3:
+            l1, l2, text = args
             quote = message
-        elif message.quote:
+        elif len(args) == 2 and message.quote and message.quote.text:
+            l1, l2 = args
             text = message.quote.text
             quote = message.quote
+        else:
+            replies.add(
+                text="❌ Wrong usage. Valid requests look like:\n/tr_en_ja hello world",
+                quote=message,
+            )
+            return
         default_engine = get_engine(bot)
         if engines[0] != default_engine:
             engines.remove(default_engine)
@@ -202,6 +208,9 @@ class TestPlugin:
 
         msg = mocker.get_one_reply("/tr_es_en hola mundo")
         assert "hello world" in msg.text.lower()
+
+        msg = mocker.get_one_reply("/tr_es hello")
+        assert "❌" in msg.text
 
         msg = mocker.get_one_reply("/tr")
         assert "*" in msg.text

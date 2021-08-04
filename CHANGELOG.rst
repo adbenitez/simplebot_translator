@@ -1,6 +1,11 @@
 Changelog
 =========
 
+`Unreleased`_
+-------------
+
+- warn user if command has wrong syntax.
+
 `1.3.0`_
 --------
 

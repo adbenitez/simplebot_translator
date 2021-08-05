@@ -5,6 +5,7 @@ Changelog
 -------------
 
 - warn user if command has wrong syntax.
+- warn user if language code is invalid.
 
 `1.3.0`_
 --------

@@ -171,6 +171,12 @@ def tr(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
                 quote=message,
             )
             return
+        if l1 not in langs.values() or l2 not in langs.values():
+            replies.add(
+                text="❌ Invalid language code. Send /tr to see the list of available codes.",
+                quote=message,
+            )
+            return
         default_engine = get_engine(bot)
         if engines[0] != default_engine:
             engines.remove(default_engine)
@@ -210,7 +216,10 @@ class TestPlugin:
         assert "hello world" in msg.text.lower()
 
         msg = mocker.get_one_reply("/tr_es hello")
-        assert "❌" in msg.text
+        assert "❌ Wrong usage" in msg.text
+
+        msg = mocker.get_one_reply("/tr_foo_bar hello")
+        assert "❌ Invalid language code" in msg.text
 
         msg = mocker.get_one_reply("/tr")
         assert "*" in msg.text

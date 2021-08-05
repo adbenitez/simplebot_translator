@@ -234,7 +234,7 @@ def _get_language(bot, addr: str) -> str:
 
 
 class TestPlugin:
-    """Offline tests"""
+    """Online tests"""
 
     def test_tr(self, mocker):
         quote = mocker.make_incoming_message("hello world")
@@ -252,3 +252,11 @@ class TestPlugin:
 
         msg = mocker.get_one_reply("/tr")
         assert "*" in msg.text
+
+    def test_filter(self, mocker):
+        msg = mocker.get_one_reply("hola mundo")
+        assert "hello world" in msg.text.lower()
+
+        # filter should work only in private/direct chat
+        msgs = mocker.get_replies("hola mundo", group="group1")
+        assert not msgs

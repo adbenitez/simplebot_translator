@@ -133,14 +133,35 @@ engines = [
 
 @simplebot.hookimpl
 def deltabot_init(bot: DeltaBot) -> None:
-    get_engine(bot)  # initialize default engine
+    _get_engine(bot)  # initialize default engine
+    lang = bot.get("language") or "en"
+    bot.add_preference(
+        "language",
+        "Language to translate received text, default value is"
+        f" {lang!r}, example values: en, es, de, ...",
+    )
 
 
 @simplebot.hookimpl
 def deltabot_start(bot: DeltaBot) -> None:
-    assert get_engine(bot) in engines, "Invalid engine, set one of: {!r}".format(
+    assert _get_engine(bot) in engines, "Invalid engine, set one of: {!r}".format(
         engines
     )
+
+
+@simplebot.filter
+def translate(bot: DeltaBot, message: Message, replies: Replies) -> None:
+    """Send me in private any text message to translate it."""
+    if not message.chat.is_group():
+        lang = _get_language(bot, message.get_sender_contact().addr)
+        if lang in langs.values():
+            text = _translate("auto", lang, message.text, bot)
+        else:
+            text = (
+                f"❌ Invalid language code: {lang!r}."
+                " Send /tr to see the list of available codes."
+            )
+        replies.add(text=text, quote=message)
 
 
 @simplebot.command
@@ -177,24 +198,28 @@ def tr(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
                 quote=message,
             )
             return
-        default_engine = get_engine(bot)
-        if engines[0] != default_engine:
-            engines.remove(default_engine)
-            engines.insert(0, default_engine)
-        for name in engines:
-            try:
-                result = getattr(ts, name)(text, from_language=l1, to_language=l2)
-                break
-            except Exception as ex:  # noqa
-                bot.logger.exception(ex)
-        else:
-            result = "❌ Error! Failed to translate :("
-        replies.add(text=result, quote=quote)
+        replies.add(text=_translate(l1, l2, text, bot), quote=quote)
     else:
         replies.add(text="\n".join("* {}: {}".format(k, v) for k, v in langs.items()))
 
 
-def get_engine(bot: DeltaBot) -> str:
+def _translate(l1: str, l2: str, text: str, bot: DeltaBot) -> str:
+    default_engine = _get_engine(bot)
+    if engines[0] != default_engine:
+        engines.remove(default_engine)
+        engines.insert(0, default_engine)
+    for name in engines:
+        try:
+            result = getattr(ts, name)(text, from_language=l1, to_language=l2)
+            break
+        except Exception as ex:  # noqa
+            bot.logger.exception(ex)
+    else:
+        result = "❌ Error! Failed to translate :("
+    return result
+
+
+def _get_engine(bot: DeltaBot) -> str:
     key = "engine"
     value = engines[0]
     val = bot.get(key, scope=__name__)
@@ -202,6 +227,10 @@ def get_engine(bot: DeltaBot) -> str:
         bot.set(key, value, scope=__name__)
         val = value
     return val
+
+
+def _get_language(bot, addr: str) -> str:
+    return bot.get("language", scope=addr) or bot.get("language") or "en"
 
 
 class TestPlugin:

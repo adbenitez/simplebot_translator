@@ -6,6 +6,7 @@ Changelog
 
 - warn user if command has wrong syntax.
 - warn user if language code is invalid.
+- added filter to translate text sent in private (user can set the language to which text will be translated)
 
 `1.3.0`_
 --------

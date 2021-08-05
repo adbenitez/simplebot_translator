@@ -31,13 +31,18 @@ To install run::
 
   pip install simplebot-translator
 
-To configure the engine use::
+To configure default engine use::
 
   simplebot db -s simplebot_translator/engine deepl
 
+To configure default language used in filter use::
+
+  simplebot db -s global/language en
+
 You may need to install other dependencies to make some engines work, check: https://github.com/UlionTse/translators
 
-Available engines:
+Available engines
+-----------------
 
 - google
 - yandex

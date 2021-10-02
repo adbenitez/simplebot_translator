@@ -23,7 +23,7 @@ if __name__ == "__main__":
     MODULE_NAME = "simplebot_translator"
     DESC = "🌎 Translator plugin for SimpleBot"
 
-    with open("README.rst") as fh:
+    with open("README.rst", encoding="utf-8") as fh:
         long_description = fh.read()
 
     setup(

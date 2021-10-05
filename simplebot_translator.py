@@ -144,9 +144,7 @@ def deltabot_init(bot: DeltaBot) -> None:
 
 @simplebot.hookimpl
 def deltabot_start(bot: DeltaBot) -> None:
-    assert _get_engine(bot) in engines, "Invalid engine, set one of: {!r}".format(
-        engines
-    )
+    assert _get_engine(bot) in engines, f"Invalid engine, set one of: {engines!r}"
 
 
 @simplebot.filter
@@ -200,7 +198,7 @@ def tr(bot: DeltaBot, payload: str, message: Message, replies: Replies) -> None:
             return
         replies.add(text=_translate(l1, l2, text, bot), quote=quote)
     else:
-        replies.add(text="\n".join("* {}: {}".format(k, v) for k, v in langs.items()))
+        replies.add(text="\n".join(f"* {k}: {v}" for k, v in langs.items()))
 
 
 def _translate(l1: str, l2: str, text: str, bot: DeltaBot) -> str:

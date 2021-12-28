@@ -1,8 +1,8 @@
 Changelog
 =========
 
-`Unreleased`_
--------------
+`1.4.0`_
+--------
 
 - warn user if command has wrong syntax.
 - warn user if language code is invalid.
@@ -32,7 +32,8 @@ Changelog
 - initial release
 
 
-.. _Unreleased: https://github.com/adbenitez/simplebot_translator/compare/v1.3.0...HEAD
-.. _1.3.0: https://github.com/adbenitez/simplebot_translator/compare/v1.2.0...1.3.0
-.. _1.2.0: https://github.com/adbenitez/simplebot_translator/compare/v1.1.0...1.2.0
+.. _Unreleased: https://github.com/adbenitez/simplebot_translator/compare/v1.4.0...HEAD
+.. _1.4.0: https://github.com/adbenitez/simplebot_translator/compare/v1.3.0...v1.4.0
+.. _1.3.0: https://github.com/adbenitez/simplebot_translator/compare/v1.2.0...v1.3.0
+.. _1.2.0: https://github.com/adbenitez/simplebot_translator/compare/v1.1.0...v1.2.0
 .. _1.1.0: https://github.com/adbenitez/simplebot_translator/compare/v1.0.0...v1.1.0

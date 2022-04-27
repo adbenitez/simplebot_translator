@@ -134,7 +134,7 @@ engines = [
 @simplebot.hookimpl
 def deltabot_init(bot: DeltaBot) -> None:
     _get_engine(bot)  # initialize default engine
-    filter_enabled = get_setting(bot, "filter_enabled", "yes")
+    filter_enabled = _get_setting(bot, "filter_enabled", "yes")
     if filter_enabled == "yes":
         lang = bot.get("language") or "en"
         bot.add_preference(
@@ -220,11 +220,10 @@ def _translate(l1: str, l2: str, text: str, bot: DeltaBot) -> str:
 
 
 def _get_engine(bot: DeltaBot) -> str:
-    return get_setting(bot, "engine", engines[0])
+    return _get_setting(bot, "engine", engines[0])
 
 
-def get_setting(bot: DeltaBot, key: str, value=None) -> str:
-    """Get setting value, if value is given and the setting is not set, the setting will be set to the given value."""
+def _get_setting(bot: DeltaBot, key: str, value=None) -> str:
     scope = __name__.split(".", maxsplit=1)[0]
     val = bot.get(key, scope=scope)
     if val is None and value is not None:

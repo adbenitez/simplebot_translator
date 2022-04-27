@@ -39,6 +39,11 @@ To configure default language used in filter use::
 
   simplebot db -s global/language en
 
+
+To disable the default filter and only allow to translate with commands::
+
+  simplebot db -s global/filter_enabled no
+
 You may need to install other dependencies to make some engines work, check: https://github.com/UlionTse/translators
 
 Available engines

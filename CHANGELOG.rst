@@ -1,6 +1,11 @@
 Changelog
 =========
 
+`Unreleased`_
+-------------
+
+- allow to disable the message filter.
+
 `1.4.0`_
 --------
 

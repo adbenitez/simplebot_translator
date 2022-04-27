@@ -134,12 +134,15 @@ engines = [
 @simplebot.hookimpl
 def deltabot_init(bot: DeltaBot) -> None:
     _get_engine(bot)  # initialize default engine
-    lang = bot.get("language") or "en"
-    bot.add_preference(
-        "language",
-        "Language to translate received text, default value is"
-        f" {lang!r}, example values: en, es, de, ...",
-    )
+    filter_enabled = get_setting(bot, "filter_enabled", "yes")
+    if filter_enabled == "yes":
+        lang = bot.get("language") or "en"
+        bot.add_preference(
+            "language",
+            "Language to translate received text, default value is"
+            f" {lang!r}, example values: en, es, de, ...",
+        )
+        bot.filters.register(translate_filter)
 
 
 @simplebot.hookimpl
@@ -147,8 +150,7 @@ def deltabot_start(bot: DeltaBot) -> None:
     assert _get_engine(bot) in engines, f"Invalid engine, set one of: {engines!r}"
 
 
-@simplebot.filter
-def translate(bot: DeltaBot, message: Message, replies: Replies) -> None:
+def translate_filter(bot: DeltaBot, message: Message, replies: Replies) -> None:
     """Send me in private any text message to translate it."""
     if not message.chat.is_group() and message.text:
         lang = _get_language(bot, message.get_sender_contact().addr)
@@ -218,11 +220,15 @@ def _translate(l1: str, l2: str, text: str, bot: DeltaBot) -> str:
 
 
 def _get_engine(bot: DeltaBot) -> str:
-    key = "engine"
-    value = engines[0]
-    val = bot.get(key, scope=__name__)
+    return get_setting(bot, "engine", engines[0])
+
+
+def get_setting(bot: DeltaBot, key: str, value=None) -> str:
+    """Get setting value, if value is given and the setting is not set, the setting will be set to the given value."""
+    scope = __name__.split(".", maxsplit=1)[0]
+    val = bot.get(key, scope=scope)
     if val is None and value is not None:
-        bot.set(key, value, scope=__name__)
+        bot.set(key, value, scope=scope)
         val = value
     return val
 

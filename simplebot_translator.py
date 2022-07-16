@@ -152,7 +152,7 @@ def deltabot_start(bot: DeltaBot) -> None:
 
 def translate_filter(bot: DeltaBot, message: Message, replies: Replies) -> None:
     """Send me in private any text message to translate it."""
-    if not message.chat.is_group() and message.text:
+    if not message.chat.is_multiuser() and message.text:
         lang = _get_language(bot, message.get_sender_contact().addr)
         if lang in langs.values():
             text = _translate("auto", lang, message.text, bot)

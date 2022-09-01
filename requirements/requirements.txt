@@ -1,2 +1,2 @@
 simplebot==2.4.0
-translators==5.0.2
+translators==5.4.2

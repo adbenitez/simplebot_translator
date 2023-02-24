@@ -118,17 +118,7 @@ langs = {
     "Zulu": "zu",
     "Auto-detect": "auto",
 }
-engines = [
-    "google",
-    "yandex",
-    "bing",
-    "sogou",
-    "baidu",
-    "tencent",
-    "youdao",
-    "alibaba",
-    "deepl",
-]
+engines = ts.translators_pool
 
 
 @simplebot.hookimpl
@@ -210,7 +200,9 @@ def _translate(l1: str, l2: str, text: str, bot: DeltaBot) -> str:
         engines.insert(0, default_engine)
     for name in engines:
         try:
-            result = getattr(ts, name)(text, from_language=l1, to_language=l2)
+            result = ts.translate_text(
+                text, translator=name, from_language=l1, to_language=l2
+            )
             break
         except Exception as ex:  # noqa
             bot.logger.exception(ex)
@@ -220,7 +212,7 @@ def _translate(l1: str, l2: str, text: str, bot: DeltaBot) -> str:
 
 
 def _get_engine(bot: DeltaBot) -> str:
-    return _get_setting(bot, "engine", engines[0])
+    return _get_setting(bot, "engine", "google")
 
 
 def _get_setting(bot: DeltaBot, key: str, value=None) -> str:
